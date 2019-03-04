@@ -1,10 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"os"
+
+	"github.com/IkeyBenz/CodeReviewCLI/commands"
+
+	"github.com/spf13/cobra"
+)
 
 func main() {
-	// !CR @droxey
-	// Is this the most efficient way to print hello world ??
-	fmt.Println("Hello, World!")
-	// !CR end
+	cmd := &cobra.Command{
+		Use:          "gifm",
+		Short:        "Hello Gophers!",
+		SilenceUsage: true,
+	}
+
+	cmd.AddCommand(commands.PrintTime())
+
+	if err := cmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }
