@@ -3,17 +3,12 @@ package main
 import (
 	"os"
 
-	"github.com/spf13/cobra"
+	"github.com/IkeyBenz/CodeReviewCLI/commands"
 )
 
 func main() {
-	cmd := &cobra.Command{
-		Use:          "gifm",
-		Short:        "Hello Gophers!",
-		SilenceUsage: true,
-	}
 
-	if err := cmd.Execute(); err != nil {
+	if err := commands.RootCommand.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
