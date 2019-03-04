@@ -1,0 +1,92 @@
+Going to need a hosted database to store all of the request information - MongoDB
+
+
+CLI COMMANDS:
+
+ask
+status
+open :folder :requestId
+respond :requestId :codeSnippet
+
+
+    - code-review ask: (CREATE)
+        1) Searches your directories files for "!CR @username ... !CR end"
+
+        2) Creates code review 'request' and adds it to the @usernames's inbox, and your outbox
+    
+    - code-review status: (INDEX)
+        1) Goes through your outbox and checks to see if any requests's dateResponded properties have a value
+        2) Displays the one's that have been answered and the ones that are still in outbox
+
+                code-review status
+
+                OUTBOX:
+                 ID# 4) To: @Ikey Subject: "Efficiency Question" Status: Unanswered
+
+                INBOX:
+                 ID# 12) From: @Ikey Subject: "Efficiency Question"
+                
+    - code-review open :folder :requestId (READ)
+        1) Will search the db for your outbox/inbox (:folder) for the specified request
+        2) Will display the code in your terminal
+
+        If folder is INBOX {
+            3) Will update the 'opened' property on the request object.
+            4) Will display this:
+            code-review open inbox 12
+
+                ... code ...
+
+                To Respond, Copy the above code, add comments to it and enter 'code-review respond 12 "${yourCodeHere}"'
+        }
+        If folder is OUTBOX {
+            If 'cr_response' propery has value {
+                3) Will update 'opened' propery on the request object.
+                4) Will display:
+                Status: Answered dd/mm
+                Request:
+                ${from}:
+                    ${cr_request}
+                
+                Response:
+                ${to}:
+                    ${cr_response}
+                
+                5) Will move this request from OUTBOX to HISTORY in yours and responder objects.
+            } else {
+                3) Will Display:
+                Request:
+                    ${cr_request}
+                Status: Unanswered
+            }
+
+        }
+
+    
+    - code-review respond :requestId "a shit ton of code with comments" (RESPOND)
+        1) Will update the 'cr_response' of the request with the code parameter,
+        2) Will change the 'opened' property of the response to false
+        3) Will change the 'date_responded' of the request to be the current date
+
+
+
+Mongo DB:
+    Collections:
+        user: {
+            _id: ObjectId,
+            email: string, 
+            password: string, 
+            inbox: []request, 
+            outbox: []request,
+            history: []request
+        },
+        request: {
+            _id: ObjectId,
+            from: user,
+            to: user,
+            cr_request: string,
+            cr_response: string,
+            dateRequested: Date,
+            dateResponded: Date?,
+            opened: bool
+        }
