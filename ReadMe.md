@@ -12,7 +12,6 @@ This command line interface empowers its users by allowing them to efficiently s
 4) `code-review respond`: Prompts you to enter requestId and revised code snippet. Sends the revision to the person who requested the review.
 
 # Installation
-1) Download the CLI by clicking this [link](/IkeyBenz/Code-Review-CLI/blob/master/CodeReviewCLI?raw=true).
-2) Move the downloaded file to a directory of your choosing
-3) Run `echo "alias code-review='/path/to/the/CodeReviewCLI'" >> ~/.bashrc`
-4) Run `code-review` in any project directory to get started!
+1) Clone this repository
+2) In terminal in folder you cloned, run `go run && go install`
+3) Run `code-review` to use!
