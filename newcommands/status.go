@@ -29,12 +29,28 @@ var ShowStatus = &cobra.Command{
 		defer resp.Body.Close()
 
 		var res map[string]interface{}
-
 		json.NewDecoder(resp.Body).Decode(&res)
 
-		fmt.Println(res)
-		fmt.Println(res["data"])
+		b, _ := json.MarshalIndent(res, "", "\t")
+		fmt.Println(string(b))
 
 		return nil
 	},
+}
+
+func formattedStatus(status map[string]map[string]interface{}) string {
+	// outstrings := []string{
+	// 	fmt.Sprintf("Account: %s", status["email"]), "\n",
+	// 	"\tOutbox:\n",
+	// }
+	// for _, req := range status["outbox"] {
+
+	// }
+	return ""
+}
+
+func formattedRequest(req map[string]string) string {
+	outstrings := ""
+
+	return outstrings
 }
