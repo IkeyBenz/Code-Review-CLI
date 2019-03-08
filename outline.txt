@@ -94,3 +94,7 @@ Mongo DB:
 THINGS TO LEARN:
 1) How to make a CLI in golang
 2) How to connect to MONGODB using golang
+
+
+YOU JUST FINISHED MAKING MODELS
+YOU WERE ABOUT TO CONNECT TO MONGODB

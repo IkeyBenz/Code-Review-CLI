@@ -19,7 +19,7 @@ code-review status: (INDEX)
 // GetRequestStatus will index and display all requests in your outbox and inbox
 func GetRequestStatus() *cobra.Command {
 	return &cobra.Command{
-		Use: "ask",
+		Use: "status",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// TODO: Implement RespondToRequest() method body
 			return nil
