@@ -1,4 +1,4 @@
-package newcommands
+package commands
 
 import (
 	"bytes"

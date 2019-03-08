@@ -1,31 +1,66 @@
 package commands
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
 
-	"github.com/IkeyBenz/CodeReviewCLI/database"
-	"github.com/IkeyBenz/CodeReviewCLI/resources/users"
 	"github.com/spf13/cobra"
 )
 
-// SignUp will print the current time in a pretty way
+/* SAMPLE:
+> code-review signup
+> Signing you up for code-review:
+> Enter your full name:
+> Enter your email:
+> Enter your password:
+> Signinup...
+> Your account has been created! use `code-review signin` to get started.
+*/
+
+// SignUp will hit the /signup endpoint in the code-review api
 var SignUp = &cobra.Command{
-	Use:   "register",
-	Short: "Register for code review",
-	Long:  "Promps you for an email and a password and creates an account for you on code review.\n\tUsage:code-review register",
+	Use: "signup",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		defer database.MgoSession.Close()
-		err := users.NewUser(args[0], args[1])
+
+		formBody := GetFormBody(map[string]string{
+			"name":     "Enter your full name: ",
+			"email":    "Enter your email address: ",
+			"password": "Enter your password: ",
+		})
+
+		bytesArr, err := json.Marshal(formBody)
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("You are now registered on code-review as %s\n", args[0])
+		resp, err := http.Post("https://code-review-api1.herokuapp.com/signup", "application/json", bytes.NewBuffer(bytesArr))
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		var res map[string]interface{}
+
+		json.NewDecoder(resp.Body).Decode(&res)
+
+		if res["error"] != nil {
+			fmt.Print("Sign up failed: ")
+			fmt.Print(res["error"])
+		} else {
+			fmt.Println(res["success"])
+		}
+
+		for _, cookie := range resp.Cookies() {
+			if cookie.Name == "code-review" {
+				err := StoreCookie(cookie.Value)
+				if err != nil {
+					return err
+				}
+			}
+		}
 
 		return nil
 	},
-}
-
-func hashPassword(p string) (string, error) {
-	return "hashedPassword", nil
 }

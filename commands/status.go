@@ -1,28 +1,56 @@
 package commands
 
-import "github.com/spf13/cobra"
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
 
-/**
-code-review status: (INDEX)
-        1) Goes through your outbox and checks to see if any requests's dateResponded properties have a value
-        2) Displays the one's that have been answered and the ones that are still in outbox
+	"github.com/spf13/cobra"
+)
 
-                code-review status
+// ShowStatus will display the authenticated user's outbox, inbox, and history
+var ShowStatus = &cobra.Command{
+	Use: "status",
+	RunE: func(cmd *cobra.Command, args []string) error {
 
-                OUTBOX:
-                 ID# 4) To: @Ikey Subject: "Efficiency Question" Status: Unanswered
+		req, err := http.NewRequest("GET", "https://code-review-api1.herokuapp.com/my-requests", nil)
+		if err != nil {
+			return err
+		}
 
-                INBOX:
-                 ID# 12) From: @Ikey Subject: "Efficiency Question"
-*/
+		token, err := ReadCookie()
+		req.AddCookie(&http.Cookie{Name: "code-review", Value: token})
 
-// GetRequestStatus will index and display all requests in your outbox and inbox
-func GetRequestStatus() *cobra.Command {
-	return &cobra.Command{
-		Use: "status",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			// TODO: Implement RespondToRequest() method body
-			return nil
-		},
-	}
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+
+		var res map[string]interface{}
+		json.NewDecoder(resp.Body).Decode(&res)
+
+		b, _ := json.MarshalIndent(res, "", "\t")
+		fmt.Println(string(b))
+
+		return nil
+	},
+}
+
+func formattedStatus(status map[string]map[string]interface{}) string {
+	// outstrings := []string{
+	// 	fmt.Sprintf("Account: %s", status["email"]), "\n",
+	// 	"\tOutbox:\n",
+	// }
+	// for _, req := range status["outbox"] {
+
+	// }
+	return ""
+}
+
+func formattedRequest(req map[string]string) string {
+	outstrings := ""
+
+	return outstrings
 }

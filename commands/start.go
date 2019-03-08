@@ -11,4 +11,7 @@ var RootCommand = &cobra.Command{
 
 func init() {
 	RootCommand.AddCommand(SignUp)
+	RootCommand.AddCommand(SignIn)
+	RootCommand.AddCommand(MakeRequest)
+	RootCommand.AddCommand(ShowStatus)
 }
