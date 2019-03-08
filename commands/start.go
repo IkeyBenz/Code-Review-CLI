@@ -6,6 +6,7 @@ import "github.com/spf13/cobra"
 var RootCommand = &cobra.Command{
 	Use:          "code-review",
 	Short:        "Code Reviewer:",
+	Long:         "Code review allows you to send requests for code-review from your peers",
 	SilenceUsage: true,
 }
 
