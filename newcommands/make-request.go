@@ -34,6 +34,7 @@ var MakeRequest = &cobra.Command{
 
 		token, err := ReadCookie()
 		req.AddCookie(&http.Cookie{Name: "code-review", Value: token})
+		req.Header.Set("Content-Type", "application/json")
 
 		client := &http.Client{}
 		resp, err := client.Do(req)
